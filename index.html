@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html style="height:100%;">
+<head>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<script src="http://code.jquery.com/jquery-1.11.0.min.js" type="text/javascript" ></script>
+<script src="simpleCart.js"></script>
+<script>
+simpleCart({
+    cartColumns: [
+	{ view: function(item, column){
+          return"<img src='"+item.get('image')+"'>";
+       },
+      attr: 'image' },
+        {attr: "name", label: "Наименование"},
+        {view: "decrement", label: "↓", text: "-"},
+        {view: "input", attr: "quantity", label: "Количество"},
+        {view: "increment", label: "↑", text: "+"},
+        {view: "currency", attr: "price", label: "Стоимость"},
+        {view: "remove", text: "X", label: "Удалить позицию"}
+    ],
+    cartStyle: "table"
+});
+simpleCart.currency({
+    code: "RU",
+    symbol: " руб.",
+    name: "Рубли",
+    delimiter: " ",
+    after: true,
+    accuracy: 0
+});
+
+$(".clearbasket_link").click(function(){
+  simpleCart.empty();
+});
+</script>
+</head>
+<style>
+.blockk{
+  background-color:#CD853F;
+  color: white;
+  border-top: 1px solid white;
+}
+
+.product-card {
+    font-size: 14px;
+    line-height: 1.2;
+    color: rgba(0,0,0,0.8);
+    position: relative;
+    background: #fff;
+    width: 240px;
+	height:400px;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    padding: 20px;
+    margin-bottom: 20px;
+    margin-right: 20px;
+	border: 1px solid lightgrey;
+	border-radius: 8px;
+}
+
+.product-card__img {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 200px;
+    height: 200px;
+    margin-bottom: 12px;
+    text-decoration: none;
+    color: #777;
+    position: relative;
+}
+
+.product-card__link {
+    display: block;
+    text-decoration: none;
+    min-height: 58px;
+    color: inherit;
+    font-size: 16px;
+}
+
+.product-card__title {
+    max-height: 2.4em;
+    overflow: hidden;
+}
+
+.product-card__author {
+    color: rgba(0,0,0,0.3);
+    max-height: 1.2em;
+    overflow: hidden;
+}
+
+.product-card__footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 30px;
+    height: 40px;
+    font-size: 16px;
+}
+
+.product-card__price {
+    font-weight: bold;
+}
+
+.round {
+    border-radius: 100px; 
+	margin-left: 60px;
+	margin-top: 20px;
+	margin-bottom: 5px;
+    border: 4px solid DodgerBlue;
+    box-shadow: 0 0 7px #666;
+	float:bottom;
+   }
+   
+.container_cards {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    -webkit-box-align: end;
+    -ms-flex-align: end;
+    align-items: flex-end;
+}
+
+.container_cards-product {
+    margin: 30px 20px 20px 35px;
+}
+
+.text{
+	font-size: 60px;
+	font-family: SEGOE PRINT;
+	padding-left: 30px;
+	text-align: center;
+	color:#000000;
+	margin: 0;
+	font-weight:bold;
+}
+
+.text1{
+	font-size: 20px;
+	font-family: segoe script;
+	text-align: center;
+	color:black;
+	font-weight:bold;
+	text-decoration: underline;
+	margin: 0;
+}
+
+.footer{
+    justify-content: space-between;
+    align-items: center;
+    height: 210px;
+	width: 210px;
+	float: left;
+}
+
+
+.container {
+    font-size: 0;
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+	padding-left: 30px;
+}
+
+.header-menu__list {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.user_city {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 120px;
+}
+
+.header-menu__item button {
+    padding: 0;
+    border: none;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.header-menu__item {
+    position: relative;
+    display: inline-block;
+    vertical-align: top;
+}
+
+li {
+    display: list-item;
+    text-align: -webkit-match-parent;
+	padding-bottom: 10px;
+}
+
+.header-menu__item > a, .header-menu__item > button {
+    display: inline-block;
+    background-color: transparent;
+    font-size: 18px;
+    line-height: 30px;
+    vertical-align: top;
+    text-decoration: none;
+    cursor: pointer;
+    color: #fff;
+}
+
+a {
+    color: #007bff;
+    text-decoration: none;
+    background-color: transparent;
+}
+
+ul, menu, dir {
+    display: block;
+    list-style-type: disc;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    padding-inline-start: 40px;
+}
+
+
+.semilayer {
+    background: #FFF8DC; /* Цвет фона */
+    margin: 0 auto; /* Выравниваем слой по центру */
+    width: 80%; /* Ширина слоя */
+    opacity: 0.5; /* Значение прозрачности */
+	height: 130px;
+	width: 	600px;
+   }
+   
+.container__leftside {
+    margin-right: 20px;
+    margin-left: 100px;
+    margin-top: 30px;
+}
+
+.container__leftside {
+    display: inline-block;
+    width: 255px;
+}
+
+.navigation__title {
+    font-size: 16px;
+    padding: 0;
+    margin: 0;
+    font-weight: 700;
+    line-height: 1.2;
+	margin-bottom: 20px;
+}
+
+.navigation {
+    padding: 0;
+    list-style: none;
+    margin: 0 0 25px;
+}
+
+.navigation--category {
+    margin-left: 10px;
+    font-size: 15px;
+}
+
+.navigation__item {
+    margin: 5px 0;
+}
+
+.navigation__link {
+    color: #333;
+    text-decoration: none;
+    font-size: 15px;
+    line-height: 16px;
+}
+
+.horizontal-filters {
+    background-color: white;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    box-sizing: border-box;
+    height: 80px;
+    margin: 20px 153px 20px 35px;
+    padding: 10px 20px;
+	border-radius: 10px;
+	width: 100%;
+}
+
+.answer{
+	 padding: 20px 0 10px 10px;
+	 line-height: 1.5;
+	 font-size: 20px;
+}
+
+.answer1{
+	 font-size: 16px;
+}
+
+.basket{
+ text-decoration:none; 
+ text-align:center; 
+ padding:11px 32px; 
+ border:none; 
+ -webkit-border-radius:4px;
+ -moz-border-radius:4px; 
+ border-radius: 4px; 
+ font-size:18px; 
+ color:black; 
+ background:#cd863f; 
+ -webkit-box-shadow:0px 0px -20px #bababa, inset 0px 0px 1px #8c8484; 
+ -moz-box-shadow: 0px 0px -20px #bababa,  inset 0px 0px 1px #8c8484;  
+ box-shadow:0px 0px -20px #bababa, inset 0px 0px 1px #8c8484;  
+  }
+  
+.basket_enter{
+	padding-left: 100px;
+}
+.basket_enter_left{
+	padding-left: 550px;
+
+}
+
+.pd-left{
+	padding-right:5px;
+}
+
+html {overflow-x:hidden;}
+
+.header-menu{
+	
+}
+
+
+</style>
+
+  <body style="margin:0px;height:100%;">
+  
+    <table height="100%" width="100%" border="0" cellspacing="0">
+	  <tr>
+        <td colspan="2" style="height:200px;border-top:1px solid white;  background:url(book.jpg) #CD853F; width:100%">
+		  <a href="index.html" target="_self"><div class="semilayer"><p class="text">"Лабиринт"<p class="text1">книжный магазин </p></p></a>
+        </div>
+		</td>
+      </tr>
+	  <tr>
+        <td colspan="2" class="blockk">
+		<div class="header-menu">
+					<ul class="header-menu__list">
+						<li class="header-menu__item">
+							<a href="" class="basket basket_enter"><u>Тверь</u></a>
+						</li>
+						<li class="header-menu__item">
+							<a href="index.html" target="_self" class="basket">Главная</a>
+						</li>
+						<li class="header-menu__item">
+							<a href="" class="basket">Адреса магазинов</a>
+						</li>
+						<li class="header-menu__item">
+							<a href="" class="basket">Доставка и оплата</a>
+						</li>
+						<li class="header-menu__item">
+							<a href="" class="basket">Связаsться с нами</a>
+						</li>
+						<li class="header-menu__item">
+							<a href="" class="basket">Бонусные программы</a>
+						</li>
+						<li class="header-menu__item basket_enter_left">
+							<a href="./pages/1.html" class="basket" class="j-submit-report" target="_self" style="font-size:14px;"><img src="cart.svg" alt="cart" class="pd-left"><span class="simpleCart_quantity"> </span></a>
+						</li>
+												
+					</ul>
+			</div>
+		</td>
+      </tr>
+      
+	  <tr style="vertical-align: top;">
+        <td style="background-color:#F0F8FF;width:500px;text-align:top;border-right:1px solid lightgrey;">
+          <div class="container__leftside">
+						
+	<p class="navigation__title">Категории</p>
+	<ul class="navigation navigation--category">
+					<li class="navigation__item"><a href="" class="navigation__link">Художественная литература</a></li>
+					<li class="navigation__item"><a href="" class="navigation__link">Книги для детей</a></li>
+					<li class="navigation__item"><a href="" class="navigation__link">Образование</a></li>
+					<li class="navigation__item"><a href="" class="navigation__link">Наука и техника</a></li>
+					<li class="navigation__item"><a href="" class="navigation__link">Общество</a></li>
+					<li class="navigation__item"><a href="" class="navigation__link">Деловая литература</a></li>
+					<li class="navigation__item"><a href="" class="navigation__link">Красота. Здоровье. Спорт</a></li>
+					<li class="navigation__item"><a href="" class="navigation__link">Увлечения</a></li>
+					<li class="navigation__item"><a href="" class="navigation__link">Психология</a></li>
+					<li class="navigation__item"><a href="" class="navigation__link">Эзотерика</a></li>
+					<li class="navigation__item"><a href="" class="navigation__link">Философия и религия</a></li>
+					<li class="navigation__item"><a href="" class="navigation__link">Искусство</a></li>
+					<li class="navigation__item"><a href="" class="navigation__link">Подарочные издания</a></li>
+					<li class="navigation__item"><a href="" class="navigation__link">Книги на иностранных языках</a></li>
+			</ul>
+	</div>
+        </td>
+        <td style="background-color:#F0F8FF;text-align:top;">
+		<div class="horizontal-filters">
+		<p class="answer"><b>Книги</b><br><span class="answer1">Новинки литературы</span></p>
+			</div>
+		<div class="container_cards container_cards-product">
+		
+		<div class="product-card simpleCart_shelfItem">
+        <a class="product-card__img js-analytic-productlink">
+            <img alt="image" src="1.jpg" class="item_image" style="display: block;">   
+        </a>
+        <div class="product-card__info">
+            <a class="product-card__link">
+                <div class="product-card__title item_name">Гарри Поттер. Полное собрание (комплект из 7 книг)</div>
+            <div class="product-card__author">Роулинг Дж.</div>
+			<div class="product-card__author" style="font-style:italic; color:black;padding-top:3px;">Фантастика</div>
+            </a>
+            <div class="product-card__footer">
+            <div class="product-card__price">
+                    <span class="price item_price">3621 ₽</span>
+					</div>
+			<button type="button" class="btn btn-danger item_add">Купить</button>
+            </div></div>
+        </div>
+		
+		<div class="product-card simpleCart_shelfItem">
+        <a class="product-card__img js-analytic-productlink">
+            <img alt="image" src="2.jpg" class="item_image" style="display: block;">
+        </a>
+        <div class="product-card__info">
+            <a class="product-card__link">
+                <div class="product-card__title item_name">Знаменитые сумеречные охотники и жители нижнего мира</div>
+            <div class="product-card__author">Клэр К.</div>
+			<div class="product-card__author" style="font-style:italic; color:black;padding-top:3px;">Фантастика</div>
+            </a>
+            <div class="product-card__footer">
+            <div class="product-card__price">
+                    <span class="price item_price">494 ₽</span>
+					</div>
+			<button type="button" class="btn btn-danger item_add">Купить</button>
+            </div></div>
+        </div>
+		
+		<div class="product-card simpleCart_shelfItem">
+        <a class="product-card__img js-analytic-productlink">
+            <img alt="image" class="item_image" src="3.jpg" style="display: block;"> 
+        </a>
+        <div class="product-card__info">
+            <a class="product-card__link">
+                <div class="product-card__title item_name">Хроники Бейна. Книга первая</div>
+            <div class="product-card__author">Клэр К., Брэннан С., Джонсон М.</div>
+			<div class="product-card__author" style="font-style:italic; color:black;padding-top:3px;">Фантастика</div>
+            </a>
+            <div class="product-card__footer">
+            <div class="product-card__price">
+                    <span class="price item_price">410 ₽</span>
+					</div>
+			<button type="button" class="btn btn-danger item_add">Купить</button>
+            </div></div>
+        </div>
+		
+		<div class="product-card simpleCart_shelfItem">
+        <a class="product-card__img js-analytic-productlink">
+            <img alt="image" class="item_image" src="4.jpg" style="display: block;"> <!-- class="lazy"-->
+        </a>
+        <div class="product-card__info">
+            <a class="product-card__link">
+                <div class="product-card__title item_name">Орудия смерти. Город стекла</div>
+            <div class="product-card__author">Клэр К.</div>
+			<div class="product-card__author" style="font-style:italic; color:black;padding-top:3px;">Фантастика</div>
+            </a>
+            <div class="product-card__footer">
+            <div class="product-card__price">
+                    <span class="price item_price">450 ₽</span>
+					</div>
+			<button type="button" class="btn btn-danger item_add">Купить</button>
+            </div></div>
+        </div>
+		
+		<div class="product-card simpleCart_shelfItem">
+        <a class="product-card__img js-analytic-productlink">
+            <img alt="image" class="item_image"  src="5.jpg" style="display: block;">   
+        </a>
+        <div class="product-card__info">
+            <a class="product-card__link">
+                <div class="product-card__title item_name">Сияние</div>
+            <div class="product-card__author">Кинг С.</div>
+			<div class="product-card__cds" style="font-style:italic; color:black;padding-top:3px;">Ужасы</div>
+            
+            </a>
+            <div class="product-card__footer">
+            <div class="product-card__price">
+                    <span class="price item_price">222 ₽</span>
+					</div>
+			<button type="button" class="btn btn-danger item_add">Купить</button>
+            </div></div>
+        </div>
+		
+		<div class="product-card simpleCart_shelfItem">
+        <a class="product-card__img js-analytic-productlink">
+            <img alt="image" class="item_image" src="6.jpg" style="display: block;">   
+        </a>
+        <div class="product-card__info">
+            <a class="product-card__link">
+                <div class="product-card__title item_name">Оно</div>
+            <div class="product-card__author">Кинг С.</div>
+			<div class="product-card__author" style="font-style:italic; color:black;padding-top:3px;">Ужасы</div>
+            </a>
+            <div class="product-card__footer">
+            <div class="product-card__price">
+                    <span class="price item_price">800 ₽</span>
+					</div>
+			<button type="button" class="btn btn-danger item_add">Купить</button>
+            </div></div>
+        </div>
+
+		<div class="product-card simpleCart_shelfItem">
+        <a class="product-card__img js-analytic-productlink">
+            <img alt="image" class="item_image" src="7.jpg" style="display: block;">   
+        </a>
+        <div class="product-card__info">
+            <a class="product-card__link">
+                <div class="product-card__title item_name">Долорес Клейборн</div>
+            <div class="product-card__author">Кинг С.</div>
+			<div class="product-card__author" style="font-style:italic; color:black;padding-top:3px;">Ужасы</div>
+            </a>
+            <div class="product-card__footer">
+            <div class="product-card__price">
+                    <span class="price item_price">180 ₽</span>
+					</div>
+			<button type="button" class="btn btn-danger item_add">Купить</button>
+            </div></div>
+        </div>
+		
+		<div class="product-card simpleCart_shelfItem">
+        <a class="product-card__img js-analytic-productlink">
+            <img alt="image" class="item_image" src="8.jpg" style="display: block;">   
+        </a>
+        <div class="product-card__info">
+            <a class="product-card__link">
+                <div class="product-card__title item_name">Куджо</div>
+            <div class="product-card__author">Кинг С.</div>
+			<div class="product-card__author" style="font-style:italic; color:black;padding-top:3px;">Ужасы</div>
+            </a>
+            <div class="product-card__footer">
+            <div class="product-card__price">
+                    <span class="price item_price">278 ₽</span>
+					</div>
+			<button type="button" class="btn btn-danger item_add">Купить</button>
+            </div></div>
+        </div>
+		
+		<div class="product-card simpleCart_shelfItem">
+        <a class="product-card__img js-analytic-productlink">
+            <img alt="image" class="item_image" src="9.jpg" style="display: block;">   
+        </a>
+        <div class="product-card__info">
+            <a class="product-card__link">
+                <div class="product-card__title item_name">Сияние</div>
+            <div class="product-card__author">Кинг С.</div>
+			<div class="product-card__author" style="font-style:italic; color:black;padding-top:3px;">Ужасы</div>
+            </a>
+            <div class="product-card__footer">
+            <div class="product-card__price">
+                    <span class="price item_price">494 ₽</span>
+					</div>
+			<button type="button" class="btn btn-danger item_add">Купить</button>
+            </div></div>
+        </div>
+		
+		<div class="product-card simpleCart_shelfItem">
+        <a class="product-card__img js-analytic-productlink">
+            <img alt="image" class="item_image" src="10.jpg" style="display: block;">   
+        </a>
+        <div class="product-card__info">
+            <a class="product-card__link">
+                <div class="product-card__title item_name">Зов Ктулху</div>
+            <div class="product-card__author">Лавкрафт Г.</div>
+			<div class="product-card__author" style="font-style:italic; color:black;padding-top:3px;">Ужасы</div>
+            </a>
+            <div class="product-card__footer">
+            <div class="product-card__price">
+                    <span class="price item_price">289 ₽</span>
+					</div>
+			<button type="button" class="btn btn-danger item_add">Купить</button>
+            </div></div>
+        </div>
+		
+		<div class="product-card simpleCart_shelfItem">
+        <a class="product-card__img js-analytic-productlink">
+            <img alt="image" class="item_image" src="11.jpg" style="display: block;">   
+        </a>
+        <div class="product-card__info">
+            <a class="product-card__link">
+                <div class="product-card__title item_name">Depeche Mode. Графический роман</div>
+            <div class="product-card__author"></div>
+			<div class="product-card__author" style="font-style:italic; color:black;padding-top:3px;">Комикс</div>
+            </a>
+            <div class="product-card__footer">
+            <div class="product-card__price">
+                    <span class="price item_price">259 ₽</span>
+					</div>
+			<button type="button" class="btn btn-danger item_add">Купить</button>
+            </div></div>
+        </div>
+		
+		<div class="product-card simpleCart_shelfItem">
+        <a class="product-card__img js-analytic-productlink">
+            <img alt="image" class="item_image" src="12.jpg" style="display: block;">   
+        </a>
+        <div class="product-card__info">
+            <a class="product-card__link">
+                <div class="product-card__title item_name">Питер Паркер. Поразительный Человек-Паук. Том 2. Особо опасен</div>
+            <div class="product-card__author">Здарски Ч.</div>
+			<div class="product-card__author" style="font-style:italic; color:black;padding-top:3px;">Комикс</div>
+            </a>
+            <div class="product-card__footer">
+            <div class="product-card__price">
+                    <span class="price item_price">350 ₽</span>
+					</div>
+			<button type="button" class="btn btn-danger item_add">Купить</button>
+            </div></div>
+        </div>
+		
+		<div class="product-card simpleCart_shelfItem">
+        <a class="product-card__img js-analytic-productlink">
+            <img alt="image" class="item_image" src="13.jpg" style="display: block;">   
+        </a>
+        <div class="product-card__info">
+            <a class="product-card__link">
+                <div class="product-card__title item_name">Убить пересмешника. Графический роман</div>
+            <div class="product-card__author">Ли Х.</div>
+			<div class="product-card__author" style="font-style:italic; color:black;padding-top:3px;">Комикс</div>
+            </a>
+            <div class="product-card__footer">
+            <div class="product-card__price">
+                    <span class="price item_price">1173 ₽</span>
+					</div>
+			<button type="button" class="btn btn-danger item_add">Купить</button>
+            </div></div>
+        </div>
+		
+		</div>
+
+		</td>
+      </tr>
+	  
+      <tr>
+        <td colspan="2" style="background-color:#CD853F;text-align:center;height:40px;">
+        Copyright © 2019 www.xxxxxxxxxxxxxxxxxxxx.ru</td>
+      </tr>
+    </table>
+ 
+  </body>
+</html> 

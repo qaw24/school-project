@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html style="height:100%;">
+<head>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<script src="lib/sweet-alert.min.js"></script>
+<link rel="stylesheet" type="text/css" href="lib/sweet-alert.css">
+<script src="http://code.jquery.com/jquery-1.11.0.min.js" type="text/javascript" ></script>
+<script src="simpleCart.js"></script>
+<script>
+simpleCart({
+    cartColumns: [
+	{ view: function(item, column){
+          return"<img src='"+item.get('image')+"'>";
+       },
+      attr: 'image' },
+        {attr: "name", label: "Наименование"},
+        {view: "decrement", label: "   Меньше   ", text: "-"},
+        {view: "input", attr: "quantity", label: "Количество"},
+        {view: "increment", label: "   Больше   ", text: "+"},
+        {view: "currency", attr: "price", label: "   Цена"},
+        {view: "remove", text: "X", label: "Удалить позицию"}
+    ],
+    cartStyle: "table"
+});
+simpleCart.currency({
+    code: "RU",
+    symbol: " руб.",
+    name: "Рубли",
+    delimiter: " ",
+    after: true,
+    accuracy: 0
+});
+
+$(".clearbasket_link").click(function(){
+  simpleCart.empty();
+});
+</script>
+</head>
+
+<style>
+.overlay {
+top: 0;
+right: 0;
+bottom: 0;
+left: 0;
+z-index: 10;
+display: none;
+/* фон затемнения */
+background-color: rgba(0, 0, 0, 0.65);
+position: fixed; /* фиксированное позиционирование */
+cursor: default; /* тип курсора */
+}
+ 
+/* активируем слой затемнения */
+.overlay:target {
+display: block;
+}
+ 
+/* стили модального окна */
+.popup {
+top: -100%;
+right: 0;
+left: 50%;
+font-size: 14px;
+z-index: 20;
+margin: 0;
+width: 85%;
+min-width: 320px;
+max-width: 600px;
+/* фиксированное позиционирование, окно стабильно при прокрутке */
+position: fixed;
+padding: 15px;
+border: 1px solid #383838;
+background: #fefefe;
+/* скругление углов */
+-webkit-border-radius: 4px;
+-moz-border-radius: 4px;
+-ms-border-radius: 4px;
+border-radius: 4px;
+font: 14px/18px 'Tahoma', Arial, sans-serif;
+/* внешняя тень */
+-webkit-box-shadow: 0 15px 20px rgba(0,0,0,.22),0 19px 60px rgba(0,0,0,.3);
+-moz-box-shadow: 0 15px 20px rgba(0,0,0,.22),0 19px 60px rgba(0,0,0,.3);
+-ms-box-shadow: 0 15px 20px rgba(0,0,0,.22),0 19px 60px rgba(0,0,0,.3);
+box-shadow: 0 15px 20px rgba(0,0,0,.22),0 19px 60px rgba(0,0,0,.3);
+-webkit-transform: translate(-50%, -500%);
+-ms-transform: translate(-50%, -500%);
+-o-transform: translate(-50%, -500%);
+transform: translate(-50%, -500%);
+-webkit-transition: -webkit-transform 0.6s ease-out;
+-moz-transition: -moz-transform 0.6s ease-out;
+-o-transition: -o-transform 0.6s ease-out;
+transition: transform 0.6s ease-out;
+}
+ 
+/* активируем модальный блок */
+.overlay:target+.popup {
+-webkit-transform: translate(-50%, -10%);
+-ms-transform: translate(-50%, -10%);
+-o-transform: translate(-50%, -10%);
+transform: translate(-50%, 0);
+top: 10%;
+}
+ 
+/* формируем кнопку закрытия */
+.close {
+top: -10px;
+right: -10px;
+width: 20px;
+height: 20px;
+position: absolute;
+padding: 0;
+border: 2px solid #ccc;
+-webkit-border-radius: 15px;
+-moz-border-radius: 15px;
+-ms-border-radius: 15px;
+-o-border-radius: 15px;
+border-radius: 15px;
+background-color: rgba(61, 61, 61, 0.8);
+-webkit-box-shadow: 0px 0px 10px #000;
+-moz-box-shadow: 0px 0px 10px #000;
+box-shadow: 0px 0px 10px #000;
+text-align: center;
+text-decoration: none;
+font: 13px/20px 'Tahoma', Arial, sans-serif;
+font-weight: bold;
+-webkit-transition: all ease .8s;
+-moz-transition: all ease .8s;
+-ms-transition: all ease .8s;
+-o-transition: all ease .8s;
+transition: all ease .8s;
+}
+ 
+.close:before {
+color: rgba(255, 255, 255, 0.9);
+content: "X";
+text-shadow: 0 -1px rgba(0, 0, 0, 0.9);
+font-size: 12px;
+}
+ 
+.close:hover {
+background-color: rgba(252, 20, 0, 0.8);
+-webkit-transform: rotate(360deg);
+-moz-transform: rotate(360deg);
+-ms-transform: rotate(360deg);
+-o-transform: rotate(360deg);
+transform: rotate(360deg);
+}
+.blockk{
+  background-color:#CD853F;
+  color: white;
+  border-top: 1px solid white;
+}
+
+.product-card {
+    font-size: 14px;
+    line-height: 1.2;
+    color: rgba(0,0,0,0.8);
+    position: relative;
+    background: #fff;
+    width: 240px;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    padding: 20px;
+    margin-bottom: 20px;
+    margin-right: 20px;
+	border: 1px solid lightgrey;
+	border-radius: 8px;
+}
+
+.product-card__img {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 200px;
+    height: 200px;
+    margin-bottom: 12px;
+    text-decoration: none;
+    color: #777;
+    position: relative;
+}
+
+.product-card__link {
+    display: block;
+    text-decoration: none;
+    min-height: 58px;
+    color: inherit;
+    font-size: 16px;
+}
+
+.product-card__title {
+    max-height: 2.4em;
+    overflow: hidden;
+}
+
+.product-card__author {
+    color: rgba(0,0,0,0.3);
+    max-height: 1.2em;
+    overflow: hidden;
+}
+
+.product-card__footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 12px;
+    height: 40px;
+    font-size: 16px;
+}
+
+.product-card__price {
+    font-weight: bold;
+}
+
+.round {
+    border-radius: 100px; 
+	margin-left: 60px;
+	margin-top: 20px;
+	margin-bottom: 5px;
+    border: 4px solid DodgerBlue;
+    box-shadow: 0 0 7px #666;
+	float:bottom;
+   }
+   
+.container_cards {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    -webkit-box-align: end;
+    -ms-flex-align: end;
+    align-items: flex-end;
+}
+
+.container_cards-product {
+    margin: 30px 20px 20px 35px;
+}
+
+.text{
+	font-size: 60px;
+	font-family: SEGOE PRINT;
+	padding-left: 30px;
+	text-align: center;
+	color:#000000;
+	margin: 0;
+	font-weight:bold;
+}
+
+.text1{
+	font-size: 20px;
+	font-family: segoe script;
+	text-align: center;
+	color:black;
+	font-weight:bold;
+	text-decoration: underline;
+	margin: 0;
+}
+
+.footer{
+    justify-content: space-between;
+    align-items: center;
+    height: 210px;
+	width: 210px;
+	float: left;
+}
+
+
+.container {
+    font-size: 0;
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+	padding-left: 30px;
+}
+
+.header-menu__list {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.user_city {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 120px;
+}
+
+.header-menu__item button {
+    padding: 0;
+    border: none;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.header-menu__item {
+    position: relative;
+    display: inline-block;
+    vertical-align: top;
+}
+
+li {
+    display: list-item;
+    text-align: -webkit-match-parent;
+	padding-bottom: 10px;
+}
+
+.header-menu__item > a, .header-menu__item > button {
+    display: inline-block;
+    background-color: transparent;
+    font-size: 14px;
+    line-height: 30px;
+    vertical-align: top;
+    text-decoration: none;
+    cursor: pointer;
+    color: #fff;
+}
+
+a {
+    color: #007bff;
+    text-decoration: none;
+    background-color: transparent;
+}
+
+ul, menu, dir {
+    display: block;
+    list-style-type: disc;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    padding-inline-start: 40px;
+}
+
+
+.semilayer {
+    background: #FFF8DC; /* Цвет фона */
+    margin: 0 auto; /* Выравниваем слой по центру */
+    width: 80%; /* Ширина слоя */
+    opacity: 0.5; /* Значение прозрачности */
+	height: 130px;
+	width: 	600px;
+   }
+   
+.container__leftside {
+    margin-right: 20px;
+    margin-left: 100px;
+    margin-top: 30px;
+}
+
+.container__leftside {
+    display: inline-block;
+    width: 255px;
+}
+
+.navigation__title {
+    font-size: 16px;
+    padding: 0;
+    margin: 0;
+    font-weight: 700;
+    line-height: 1.2;
+	margin-bottom: 20px;
+}
+
+.navigation {
+    padding: 0;
+    list-style: none;
+    margin: 0 0 25px;
+}
+
+.navigation--category {
+    margin-left: 10px;
+    font-size: 15px;
+}
+
+.navigation__item {
+    margin: 5px 0;
+}
+
+.navigation__link {
+    color: #333;
+    text-decoration: none;
+    font-size: 15px;
+    line-height: 16px;
+}
+
+.horizontal-filters {
+    background-color: #f2f2f2;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    box-sizing: border-box;
+    height: 80px;
+    margin: 20px 153px 20px 35px;
+    padding: 10px 20px;
+	border-radius: 10px;
+}
+
+.answer{
+	 padding: 20px 0 10px 10px;
+	 line-height: 1.5;
+	 font-size: 20px;
+}
+
+.answer1{
+	 font-size: 16px;
+}
+
+.basket{
+ text-decoration:none; 
+ text-align:center; 
+ padding:11px 32px; 
+ border:none; 
+ -webkit-border-radius:4px;
+ -moz-border-radius:4px; 
+ border-radius: 4px; 
+ font-size:14px; 
+ color:#ffffff; 
+ background:#cd863f; 
+ -webkit-box-shadow:0px 0px -20px #bababa, inset 0px 0px 1px #8c8484; 
+ -moz-box-shadow: 0px 0px -20px #bababa,  inset 0px 0px 1px #8c8484;  
+ box-shadow:0px 0px -20px #bababa, inset 0px 0px 1px #8c8484;  
+  }
+  
+.basket_enter{
+	padding-left: 100px;
+}
+.basket_enter_left{
+	padding-left: 600px;
+}
+
+.pd-left{
+	padding-right:5px;
+}
+
+.shift-total{
+	text-align:right;
+	padding-right:40%;
+}
+
+.shift{
+	margin: 30px 20px 0 150px;
+	text-align: center;
+}
+
+.shift-buy{
+	margin-left: 1100px;
+	margin-bottom: 10px;
+}
+html {overflow-x:hidden;}
+
+</style>		
+<body style="margin:0px;height:100%;">
+  
+    <table height="100%" border="0" width="100%" cellspacing="0">
+	  <tr>
+        <td colspan="2" style="height:200px;border-top:1px solid white;  background:url(book.jpg) #CD853F; width:100%">
+		  <a href="books.html" target="_self""><div class="semilayer"><p class="text">"Лабиринт"<p class="text1">книжный магазин </p></p></a>
+        </div>
+		</td>
+      </tr>
+	  <tr>
+        <td colspan="2" class="blockk">
+		<div class="header-menu">
+					<ul class="header-menu__list">
+						<li class="header-menu__item">
+							<a href="" class="basket basket_enter"><u>Тверь</u></a>
+						</li>
+						<li class="header-menu__item">
+							<a href="books.html" target="_self" class="basket">Главная</a>
+						</li>
+						<li class="header-menu__item">
+							<a href="" class="basket">Адреса магазинов</a>
+						</li>
+						<li class="header-menu__item">
+							<a href="" class="basket">Доставка и оплата</a>
+						</li>
+						<li class="header-menu__item">
+							<a href="" class="basket">Связаться с нами</a>
+						</li>
+						<li class="header-menu__item">
+							<a href="" class="basket">Бонусные программы</a>
+						</li>
+						<li class="header-menu__item basket_enter_left">
+							<a href="1.html" class="basket" class="j-submit-report" target="_self"><img src="cart.svg" alt="cart" class="pd-left"><span class="simpleCart_quantity"> </span></a>
+						</li>
+												
+					</ul>
+			</div>
+		</td>
+	  <tr>
+        <td height="100%">
+		<div class="simpleCart_items shift"></div>
+		<div class="shift">
+		<p class="shift-total">Сумма заказа:  
+		<span class="simpleCart_total"></span></div></p>
+		<a href="#win1" type="button" class="btn btn-danger shift-buy" >Заказать</a>
+
+		<a href="#x" class="overlay" id="win1"></a>
+		<div class="popup">
+
+<form id="contactForm" method="post">
+    <div class="form-group">
+        <label for="name">Ваше имя:</label>
+        <input id="name" class="form-control" name="name" placeholder="Иванов Иван Иванович">
+    </div>
+    <div class="form-group">
+        <label for="email">Ваш E-mail:</label>
+        <input id="email" class="form-control" name="email" placeholder="ivanov@email.com">
+    </div>
+    <div class="form-group">
+        <label for="phone">Ваш телефон:</label>
+        <input id="phone" class="form-control" name="phone" placeholder="+7 (800) 000-00-00">
+    </div>
+    <div class="form-group">
+        <label for="phone">Способ оплаты:</label>
+		<select class="form-control" >
+			<option>Наличные</option>
+			<option>Наложный платеж</option>
+			<option>Банковской картой</option>
+			<option>Электронные деньги</option>
+		</select>
+    </div>
+	<div class="form-group">
+        <label for="phone">Способ доставки:</label>
+		<select class="form-control" >
+			<option>Доставка курьером (200 рублей)</option>
+			<option>Самовывоз</option>
+			<option>Доставка почтой</option>
+			<option>Доставка транспортной компанией</option>
+		</select>
+    </div>
+    <div class="form-group form-check">
+        <input id="check" class="form-check-input" checked type="checkbox">
+        <label class="form-check-label" for="check">Я добровольно отправляю свои данные</label>
+    </div>
+	<a id="button" type="submit" class="btn btn-success" onclick="alert('Заказ оформлен!');simpleCart.empty();" href="books.html" >Отправить</a>
+    <div class="result">
+        <span id="answer"></span>
+        <span id="loader" style="display:none"><img src="images/loader.gif" alt=""></span>
+    </div>
+</form>
+
+		<a class="close"title="Закрыть" href="#close"></a>
+		</div>
+		</td>
+      </tr>
+      
+      <tr>
+        <td colspan="2" style="background-color:#CD853F;text-align:center;height:40px;">
+        Copyright © 2019 www.xxxxxxxxxxxxxxxxxxxx.ru</td>
+      </tr>
+    </table>
+ 
+  </body>
+</html> 
